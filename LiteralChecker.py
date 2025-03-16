@@ -6,6 +6,10 @@ class NFA:
         self.start_state = start_state
         self.accept_states = accept_states
 
+    def addTransitions(self, state, transition_list):
+        for i in transition_list:
+            self.transitions[state].add(i)
+
     def _epsilon_closure(self, states):
         """Find the epsilon closure of a set of states."""
         stack = list(states)
@@ -30,9 +34,21 @@ class NFA:
             current_states = self._epsilon_closure(next_states)
         return bool(current_states & self.accept_states)
 
+    def fileTest(self, filename):
+        """reads batch file and returns expected result and tested actual result"""
+        inputs = []
+        with open(filename) as f:
+            for i in f:
+                i = i.rstrip()
+                parts = i.rsplit(' ', 1)
+                if len(parts) == 2 and parts[1].lower() in {'true', 'false'}:
+                    inputs.append((parts[0], parts[1]))
+        # print(inputs)
+        for inp in inputs:
+            print(inp[0]+" -- Expected: "+inp[1]+" -- Actual: "+str(self.accepts(inp[0])))
 
 
-##Testing
+##Testing Example
 states = {'q0', 'q1', 'q2'}
 alphabet = {'a', 'b'}
 transitions = {
@@ -46,3 +62,7 @@ accept_states = {'q2'}
 nfa = NFA(states, alphabet, transitions, start_state, accept_states)
 print(nfa.accepts("aab"))  # True
 print(nfa.accepts("aba"))  # False
+
+nfa.fileTest("in.txt")
+## end of example
+

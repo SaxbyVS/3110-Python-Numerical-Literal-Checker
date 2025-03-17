@@ -7,9 +7,14 @@ class NFA:
         self.start_state = start_state
         self.accept_states = accept_states
 
-    def addTransitions(self, state, transition_list):
+    def addTransitions(self, state, symbol, transition_list):
+        if state not in self.transitions:
+            self.transitions[state] = {}
+        if symbol not in self.transitions[state]:
+            self.transitions[state][symbol] = set()
+
         for i in transition_list:
-            self.transitions[state].add(i)
+            self.transitions[state][symbol].add(i)
 
     def _epsilon_closure(self, states):
         """Find the epsilon closure of a set of states."""
@@ -49,6 +54,9 @@ class NFA:
             print(inp[0]+" -- Expected: "+inp[1]+" -- Actual: "+str(self.accepts(inp[0])))
 
 
+
+##TESTING
+
 ##Testing Example
 states = {'q0', 'q1', 'q2'}
 alphabet = {'a', 'b'}
@@ -57,10 +65,13 @@ transitions = {
     'q1': {'b': {'q2'}},
     'q2': {}
 }
+print(transitions)
 start_state = 'q0'
 accept_states = {'q2'}
 
 nfa = NFA(states, alphabet, transitions, start_state, accept_states)
+nfa.addTransitions('q2', 'a', {'q0', 'q1'})
+print(nfa.transitions)
 print(nfa.accepts("aab"))  # True
 print(nfa.accepts("aba"))  # False
 

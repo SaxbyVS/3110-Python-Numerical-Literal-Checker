@@ -1,3 +1,4 @@
+import string
 class NFA:
     def __init__(self, states, alphabet, transitions, start_state, accept_states):
         self.states = states
@@ -66,3 +67,33 @@ print(nfa.accepts("aba"))  # False
 nfa.fileTest("in.txt")
 ## end of example
 
+#function adds transitions to given transitions dictionary from a state to every given next state with every symbol
+def add_transitions(transitions_dict, state, symbols, next_states):
+    if state not in transitions_dict:
+        transitions_dict[state] = dict()
+    for i in symbols:
+        transitions_dict.get(state).update({i: next_states})
+
+#define sets
+non_zero_digits = [str(digit) for digit in range(1, 10)]
+decimal_digits = [str(digit) for digit in range(10)]
+hex_digits = list(string.hexdigits)
+octal_digits = list(string.octdigits)
+binary_digits = ['0','1']
+
+intlit_states = {'q0', 'q1', 'q2'}
+intlit_alphabet = set(string.hexdigits)
+intlit_alphabet.update('o','O','x','X')
+intlit_transitions = {}
+#todo create nfa transitions:
+add_transitions(intlit_transitions, 'decint', non_zero_digits, {'q5'})
+add_transitions(intlit_transitions, 'q0', {''}, {'nondecprefix', 'decint'})
+add_transitions(intlit_transitions, 'q5', {'0'}, {'final'})
+intlit_start = 'q0'
+intlit_accept = {'final'}
+
+
+intlit_nfa = NFA(intlit_states, intlit_alphabet, intlit_transitions, intlit_start, intlit_accept)
+print(intlit_nfa.accepts("1b"))
+print(intlit_nfa.accepts("20"))
+print(intlit_nfa.accepts("21"))

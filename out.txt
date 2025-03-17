@@ -1,0 +1,12 @@
+0 -- Expected: True -- Actual: True
+1 -- Expected: True -- Actual: True
+42 -- Expected: True -- Actual: True
+10_000 -- Expected: True -- Actual: True
+1_234_567 -- Expected: True -- Actual: True
+9876543212 -- Expected: True -- Actual: True
+000 -- Expected: False -- Actual: False
+0_ -- Expected: False -- Actual: False
+_10 -- Expected: False -- Actual: False
+10__00 -- Expected: False -- Actual: False
+3.14 -- Expected: False -- Actual: False
+1e3 -- Expected: False -- Actual: False

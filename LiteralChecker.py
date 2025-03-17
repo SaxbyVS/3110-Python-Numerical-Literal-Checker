@@ -7,7 +7,7 @@ class NFA:
         self.start_state = start_state
         self.accept_states = accept_states
 
-    def addTransitions(self, state, symbol, transition_list):
+    def addTransitions(self, state, symbol, transition_list): #one symbol : add list of transitions for given state
         if state not in self.transitions:
             self.transitions[state] = {}
         if symbol not in self.transitions[state]:
@@ -15,6 +15,14 @@ class NFA:
 
         for i in transition_list:
             self.transitions[state][symbol].add(i)
+    def addTransitionsMult(self, state, symbols, next_state): # multi symbols: adds next_state to those for given state
+        if state not in self.transitions:
+            self.transitions[state] = {}
+        for s in symbols:
+            if s not in self.transitions[state]:
+                self.transitions[state][s] = set()
+            self.transitions[state][s].add(next_state)
+
 
     def _epsilon_closure(self, states):
         """Find the epsilon closure of a set of states."""
@@ -40,7 +48,7 @@ class NFA:
             current_states = self._epsilon_closure(next_states)
         return bool(current_states & self.accept_states)
 
-    def fileTest(self, filename):
+    def fileTest(self, filename, filename2):
         """reads batch file and returns expected result and tested actual result"""
         inputs = []
         with open(filename) as f:
@@ -50,8 +58,9 @@ class NFA:
                 if len(parts) == 2 and parts[1].lower() in {'true', 'false'}:
                     inputs.append((parts[0], parts[1]))
         # print(inputs)
-        for inp in inputs:
-            print(inp[0]+" -- Expected: "+inp[1]+" -- Actual: "+str(self.accepts(inp[0])))
+        with open(filename2, "w") as f2:
+            for inp in inputs:
+                f2.write(inp[0]+" -- Expected: "+inp[1]+" -- Actual: "+str(self.accepts(inp[0]))+"\n")
 
 
 
@@ -75,7 +84,7 @@ print(nfa.transitions)
 print(nfa.accepts("aab"))  # True
 print(nfa.accepts("aba"))  # False
 
-nfa.fileTest("in.txt")
+# nfa.fileTest("in.txt")
 ## end of example
 
 #function adds transitions to given transitions dictionary from a state to every given next state with every symbol

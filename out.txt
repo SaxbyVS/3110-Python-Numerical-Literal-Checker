@@ -4,9 +4,10 @@
 10_000 -- Expected: True -- Actual: True
 1_234_567 -- Expected: True -- Actual: True
 9876543212 -- Expected: True -- Actual: True
-000 -- Expected: False -- Actual: False
+000 -- Expected: False -- Actual: True
 0_ -- Expected: False -- Actual: False
 _10 -- Expected: False -- Actual: False
 10__00 -- Expected: False -- Actual: False
 3.14 -- Expected: False -- Actual: False
 1e3 -- Expected: False -- Actual: False
+00_0 -- Expected: True -- Actual: True
